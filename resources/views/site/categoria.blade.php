@@ -3,6 +3,8 @@
 @section('conteudo')
 
     <div class="row container">
+        <h5>Categoria: {{ $categoria->nome }}</h5>
+
         @foreach ($produtos as $produto)
             <div class="col s12 m7">
                 <div class="card">
