@@ -13,4 +13,16 @@ class CarrinhoController extends Controller
         $itens = ShoppingCart::content();
         dd($itens);
     }
+
+    public function adicionaCarrinho(Request $request) {
+        ShoppingCart::add([
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'qty' => $request->qty,
+            'options' => [
+                'image' => $request->img
+            ]
+        ]);
+    }
 }
