@@ -21,7 +21,7 @@ class CarrinhoController extends Controller
             'id' => $request->id,
             'name' => $request->name,
             'price' => $request->price,
-            'qty' => $request->qty,
+            'qty' => abs($request->qty),
             'options' => [
                 'image' => $request->img
             ]
@@ -36,7 +36,12 @@ class CarrinhoController extends Controller
     }
 
     public function atualizaCarrinho(Request $request) {
-        ShoppingCart::update($request->rowId, $request->qty);
+        ShoppingCart::update($request->rowId, abs((int) $request->qty));
         return redirect()->route('site.carrinho')->with('sucesso','Produto do carrinho atualizado!');
+    }
+
+    public function limparCarrinho() {
+        ShoppingCart::destroy();
+        return redirect()->route('site.carrinho')->with('aviso','Seu carrinho está vazio!');
     }
 }
