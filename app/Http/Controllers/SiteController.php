@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Produto;
 use App\Models\Categoria;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SiteController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
         $produtos = Produto::paginate(3);
@@ -16,6 +19,18 @@ class SiteController extends Controller
 
     public function details($slug) {
         $produto = Produto::where('slug', $slug)->first();
+
+        //Gate::authorize('ver-produto', $produto);
+        // $this->authorize('verProduto', $produto);
+
+        if(auth()->user()->can('ver-produto', $produto)) {
+            return view('site.details', compact('produto'));
+        }
+
+        if(auth()->user()->cannot('ver-produto', $produto)) {
+            return redirect()->route('site.index');
+        }
+
         return view('site.details', compact('produto'));
     }
 
