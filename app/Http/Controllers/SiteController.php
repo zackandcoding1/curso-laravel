@@ -23,15 +23,16 @@ class SiteController extends Controller
         //Gate::authorize('ver-produto', $produto);
         // $this->authorize('verProduto', $produto);
 
-        if(auth()->user()->can('ver-produto', $produto)) {
+        if(auth()->check() && auth()->user()->can('ver-produto', $produto)) {
             return view('site.details', compact('produto'));
         }
 
-        if(auth()->user()->cannot('ver-produto', $produto)) {
+        if(auth()->check() && auth()->user()->cannot('ver-produto', $produto)) {
             return redirect()->route('site.index');
         }
 
         return view('site.details', compact('produto'));
+        //return redirect()->route('site.index');
     }
 
     public function categoria($id) {
